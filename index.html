@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kasir Toko</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">HAI</div>
+    <h1>Kasir Toko</h1>
+    <p>Silakan masuk untuk membuka sistem kasir.</p>
+    <label>Nama Kasir</label>
+    <input id="loginName" autocomplete="username" placeholder="Masukkan nama kasir">
+    <label>Kata Sandi</label>
+    <div class="password-wrap">
+      <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi">
+      <button type="button" id="togglePassword" class="password-toggle">Lihat</button>
+    </div>
+    <button id="loginBtn" class="login-btn">LOGIN</button>
+    <div id="loginError" class="login-error"></div>
+    <div class="demo-login">
+    </div>
+  </div>
+</div>
+
+<div id="appShell" class="app-shell hidden-app">
+<header>
+  <div><h1>Kasir Toko</h1><p>Kasir • Stok • Laporan • Struk</p></div>
+  <div class="userbar">
+    <div class="active-user">
+      <b id="activeCashier">-</b>
+      <small id="activeRole">-</small>
+    </div>
+    <button id="btnReport">Laporan</button>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
+</header>
+
+<main>
+<section class="stats">
+  <div><span>Omzet Hari Ini</span><b id="rev">Rp0</b></div>
+  <div><span>Keuntungan</span><b id="profit">Rp0</b></div>
+  <div><span>Transaksi</span><b id="trxCount">0</b></div>
+  <div><span>Stok Tersisa</span><b id="stockCount">0</b></div>
+</section>
+
+<section class="layout">
+  <section class="card">
+    <div class="head">
+      <div><h2>Tipe Barang</h2><small>Cari atau scan kode barang</small></div>
+      <div class="actions">
+        <button class="secondary" id="btnStockIn">+ Stok Masuk</button>
+        <button id="btnAdd">+ Barang Baru</button>
+      </div>
+    </div>
+    <div class="inputs">
+      <input id="search" placeholder="Cari nama / kode...">
+      <input id="barcode" placeholder="Scan barcode lalu Enter">
+    </div>
+    <div id="products"></div>
+  </section>
+
+  <section class="card">
+    <div class="head"><div><h2>Keranjang</h2><small>Stok berkurang setelah transaksi</small></div><button class="danger" id="clearCart">Kosongkan</button></div>
+    <div id="cart"></div>
+    <div class="total"><span>Total</span><b id="total">Rp0</b></div>
+    <input id="pay" type="number" min="0" placeholder="Uang bayar">
+    <div class="total"><span>Kembalian</span><b id="change">Rp0</b></div>
+    <button class="wide" id="checkout">Selesaikan Transaksi</button>
+  </section>
+</section>
+
+<section class="card">
+  <div class="head"><div><h2>Transaksi Hari Ini</h2><small>Data tersimpan di browser</small></div></div>
+  <div id="history"></div>
+</section>
+</main>
+
+<div class="modal hidden" id="modalAdd">
+  <div class="modalbox">
+    <h3>Tambah Barang Baru</h3>
+    <input id="pCode" placeholder="Kode / Barcode">
+    <input id="pName" placeholder="Nama barang">
+    <input id="pBuy" type="number" placeholder="Harga modal">
+    <input id="pSell" type="number" placeholder="Harga jual">
+    <input id="pStock" type="number" placeholder="Stok awal">
+    <button id="saveProduct">Simpan</button>
+    <button class="secondary close">Batal</button>
+  </div>
+</div>
+
+<div class="modal hidden" id="modalStock">
+  <div class="modalbox">
+    <h3>Stok Masuk</h3>
+    <input id="stockSearch" placeholder="Cari / scan kode barang">
+    <select id="stockProduct"></select>
+    <input id="stockQty" type="number" min="1" placeholder="Jumlah stok masuk">
+    <button id="saveStock">Tambah Stok</button>
+    <button class="secondary close">Batal</button>
+  </div>
+</div>
+
+<div class="modal hidden" id="modalReport">
+  <div class="modalbox reportbox">
+    <h3>Laporan</h3>
+    <div class="reportfilters">
+      <input id="reportDate" type="date">
+      <button id="showDateReport">Lihat Tanggal</button>
+      <button class="secondary" id="showMonthReport">Bulan Ini</button>
+    </div>
+    <div id="reportContent"></div>
+    <button class="secondary close">Tutup</button>
+  </div>
+</div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
