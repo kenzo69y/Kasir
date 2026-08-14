@@ -7,150 +7,147 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="loginScreen" class="login-screen">
-  <div class="login-card">
-    <div class="login-logo">HAI</div>
+<div id="login" class="login">
+  <form id="loginForm" class="login-card">
+    <div class="brandmark">POS</div>
     <h1>Kasir Toko</h1>
-    <p>Silakan masuk untuk membuka sistem kasir.</p>
-    <label>Nama Kasir</label>
-    <input id="loginName" autocomplete="username" placeholder="Masukkan nama kasir">
-    <label>Kata Sandi</label>
-    <div class="password-wrap">
-      <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi">
-      <button type="button" id="togglePassword" class="password-toggle">Lihat</button>
-    </div>
-    <button id="loginBtn" class="login-btn">LOGIN</button>
-    <div id="loginError" class="login-error"></div>
-    <div class="demo-login">
-    </div>
-  </div>
+    <p>Masuk untuk membuka sistem kasir.</p>
+    <input id="username" placeholder="Nama kasir" autocomplete="username">
+    <input id="password" type="password" placeholder="Kata sandi" autocomplete="current-password">
+    <button>LOGIN</button>
+    <small id="loginError"></small>
+  </form>
 </div>
 
-<div id="appShell" class="app-shell hidden-app">
+<div id="app" class="app hidden">
+<aside>
+  <div class="brand"><b>Kasir Toko</b><small>Retail Management</small></div>
+  <nav id="nav">
+    <button data-page="dashboard" class="active">▦ Dashboard</button>
+    <button data-page="cashier">▣ Kasir</button>
+    <button data-page="products">▤ Produk</button>
+    <button data-page="stock">▥ Stok</button>
+    <button data-page="suppliers">♙ Supplier</button>
+    <button data-page="purchases">▧ Pembelian</button>
+    <button data-page="finance">◈ Keuangan</button>
+    <button data-page="customers">♧ Pelanggan</button>
+    <button data-page="reports">▨ Laporan</button>
+    <button data-page="settings">⚙ Pengaturan</button>
+  </nav>
+  <button id="logout" class="logout">Keluar</button>
+</aside>
+
+<section class="workspace">
 <header>
-  <div><h1>Kasir Toko</h1><p>Kasir • Stok • Laporan • Struk</p></div>
-  <div class="userbar">
-    <div class="active-user">
-      <b id="activeCashier">-</b>
-      <small id="activeRole">-</small>
-    </div>
-    <button id="btnFinance">Keuangan</button>
-    <button id="btnReport">Laporan</button>
-    <button class="logout-btn" id="logoutBtn">Logout</button>
-  </div>
+  <div><h2 id="pageTitle">Dashboard</h2><small id="today"></small></div>
+  <div class="user"><span>Kasir Aktif</span><b id="activeUser">-</b></div>
 </header>
-
 <main>
-<section class="stats">
-  <div><span>Omzet Hari Ini</span><b id="rev">Rp0</b></div>
-  <div><span>Keuntungan Penjualan</span><b id="profit">Rp0</b></div>
-  <div><span>Uang Masuk Hari Ini</span><b id="cashInToday">Rp0</b></div>
-  <div><span>Uang Keluar Hari Ini</span><b id="cashOutToday">Rp0</b></div>
-  <div><span>Saldo Kas Hari Ini</span><b id="cashBalanceToday">Rp0</b></div>
-  <div><span>Transaksi Penjualan</span><b id="trxCount">0</b></div>
-  <div><span>Stok Tersisa</span><b id="stockCount">0</b></div>
-  <div><span>Catatan Keuangan</span><b id="financeCount">0</b></div>
+<section id="dashboard" class="page active">
+  <div class="stats">
+    <article><span>Omzet Hari Ini</span><b id="dRevenue">Rp0</b></article>
+    <article><span>Keuntungan</span><b id="dProfit">Rp0</b></article>
+    <article><span>Uang Keluar</span><b id="dExpense">Rp0</b></article>
+    <article><span>Saldo Kas</span><b id="dBalance">Rp0</b></article>
+    <article><span>Transaksi</span><b id="dTransactions">0</b></article>
+    <article><span>Stok Tersisa</span><b id="dStock">0</b></article>
+  </div>
+  <div class="grid2">
+    <article class="card"><div class="cardhead"><h3>Transaksi Terbaru</h3></div><div id="recentTx"></div></article>
+    <article class="card"><div class="cardhead"><h3>Stok Hampir Habis</h3></div><div id="lowStock"></div></article>
+  </div>
 </section>
 
-<section class="layout">
-  <section class="card">
-    <div class="head">
-      <div><h2>Tipe Barang</h2><small>Cari atau scan kode barang</small></div>
-      <div class="actions">
-        <button class="secondary" id="btnStockIn">+ Stok Masuk</button>
-        <button id="btnAdd">+ Barang Baru</button>
-      </div>
-    </div>
-    <div class="inputs">
-      <input id="search" placeholder="Cari nama / kode...">
-      <input id="barcode" placeholder="Scan barcode lalu Enter">
-    </div>
-    <div id="products"></div>
-  </section>
-
-  <section class="card">
-    <div class="head"><div><h2>Keranjang</h2><small>Stok berkurang setelah transaksi</small></div><button class="danger" id="clearCart">Kosongkan</button></div>
-    <div id="cart"></div>
-    <div class="total"><span>Total</span><b id="total">Rp0</b></div>
-    <input id="pay" type="number" min="0" placeholder="Uang bayar">
-    <div class="total"><span>Kembalian</span><b id="change">Rp0</b></div>
-    <button class="wide" id="checkout">Selesaikan Transaksi</button>
-  </section>
+<section id="cashier" class="page">
+ <div class="cashier-grid">
+  <article class="card">
+   <div class="cardhead"><h3>Kasir</h3><input id="cashierSearch" placeholder="Cari nama / barcode"></div>
+   <div id="cashierProducts" class="product-grid"></div>
+  </article>
+  <article class="card cartbox">
+   <div class="cardhead"><h3>Keranjang</h3><button id="clearCart" class="danger small">Kosongkan</button></div>
+   <div id="cart"></div>
+   <div class="summary"><span>Total</span><b id="cartTotal">Rp0</b></div>
+   <select id="paymentMethod"><option>Cash</option><option>QRIS</option><option>Transfer</option></select>
+   <input id="payAmount" type="number" placeholder="Uang bayar">
+   <div class="summary"><span>Kembalian</span><b id="change">Rp0</b></div>
+   <button id="checkout" class="primary wide">Selesaikan Transaksi</button>
+  </article>
+ </div>
 </section>
 
-<section class="card">
-  <div class="head"><div><h2>Transaksi Hari Ini</h2><small>Data tersimpan di browser</small></div></div>
-  <div id="history"></div>
+<section id="products" class="page">
+ <article class="card">
+  <div class="cardhead"><div><h3>Daftar Produk</h3><small>Kelola barang, modal, harga jual dan barcode.</small></div><button id="addProductBtn">+ Produk Baru</button></div>
+  <input id="productSearch" placeholder="Cari produk..." class="searchbar">
+  <div class="tablewrap"><table><thead><tr><th>Kode</th><th>Produk</th><th>Modal</th><th>Jual</th><th>Stok</th><th>Aksi</th></tr></thead><tbody id="productTable"></tbody></table></div>
+ </article>
+</section>
+
+<section id="stock" class="page">
+ <div class="grid2">
+  <article class="card"><h3>Stok Masuk</h3><select id="stockProduct"></select><input id="stockQty" type="number" min="1" placeholder="Jumlah masuk"><input id="stockNote" placeholder="Catatan / nomor faktur"><button id="addStockBtn">Tambah Stok</button></article>
+  <article class="card"><h3>Riwayat Stok</h3><div id="stockHistory"></div></article>
+ </div>
+</section>
+
+<section id="suppliers" class="page">
+ <article class="card"><div class="cardhead"><h3>Supplier</h3><button id="addSupplierBtn">+ Supplier</button></div><div id="supplierList"></div></article>
+</section>
+
+<section id="purchases" class="page">
+ <article class="card">
+  <div class="cardhead"><div><h3>Pembelian Barang</h3><small>Pembelian otomatis menambah stok dan mencatat uang keluar.</small></div></div>
+  <div class="formgrid">
+   <select id="purchaseSupplier"></select><select id="purchaseProduct"></select>
+   <input id="purchaseQty" type="number" min="1" placeholder="Jumlah">
+   <input id="purchaseUnitCost" type="number" min="0" placeholder="Harga modal / unit">
+   <input id="purchaseNote" placeholder="No faktur / catatan">
+   <button id="savePurchase">Simpan Pembelian</button>
+  </div>
+  <div id="purchaseHistory"></div>
+ </article>
+</section>
+
+<section id="finance" class="page">
+ <div class="stats">
+  <article><span>Uang Masuk Hari Ini</span><b id="fIn">Rp0</b></article>
+  <article><span>Uang Keluar Hari Ini</span><b id="fOut">Rp0</b></article>
+  <article><span>Saldo Kas Hari Ini</span><b id="fBalance">Rp0</b></article>
+ </div>
+ <article class="card">
+  <div class="cardhead"><h3>Catatan Keuangan</h3></div>
+  <div class="formgrid">
+   <select id="financeType"><option value="in">Uang Masuk</option><option value="out">Uang Keluar</option></select>
+   <select id="financeCategory"><option>Modal Tambahan</option><option>Pendapatan Lain</option><option>Belanja Stok</option><option>Listrik</option><option>Air</option><option>Internet</option><option>Transport</option><option>Gaji</option><option>Makan</option><option>Pengeluaran Lain</option></select>
+   <input id="financeAmount" type="number" min="1" placeholder="Nominal">
+   <input id="financeNote" placeholder="Keterangan">
+   <button id="saveFinance">Simpan</button>
+  </div>
+  <div id="financeHistory"></div>
+ </article>
+</section>
+
+<section id="customers" class="page">
+ <article class="card"><div class="cardhead"><h3>Pelanggan</h3><button id="addCustomerBtn">+ Pelanggan</button></div><div id="customerList"></div></article>
+</section>
+
+<section id="reports" class="page">
+ <article class="card">
+  <div class="cardhead"><h3>Laporan</h3><input id="reportDate" type="date"></div>
+  <div id="reportSummary" class="stats reportstats"></div>
+  <div id="reportTransactions"></div>
+ </article>
+</section>
+
+<section id="settings" class="page">
+ <article class="card"><h3>Pengaturan Toko</h3><label>Nama Toko</label><input id="storeName"><label>Alamat</label><input id="storeAddress"><label>Footer Struk</label><input id="receiptFooter"><button id="saveSettings">Simpan Pengaturan</button><p class="hint">Versi ini masih offline dan menyimpan data di browser komputer ini.</p></article>
 </section>
 </main>
-
-<div class="modal hidden" id="modalAdd">
-  <div class="modalbox">
-    <h3>Tambah Barang Baru</h3>
-    <input id="pCode" placeholder="Kode / Barcode">
-    <input id="pName" placeholder="Nama barang">
-    <input id="pBuy" type="number" placeholder="Harga modal">
-    <input id="pSell" type="number" placeholder="Harga jual">
-    <input id="pStock" type="number" placeholder="Stok awal">
-    <button id="saveProduct">Simpan</button>
-    <button class="secondary close">Batal</button>
-  </div>
+</section>
 </div>
 
-<div class="modal hidden" id="modalStock">
-  <div class="modalbox">
-    <h3>Stok Masuk</h3>
-    <input id="stockSearch" placeholder="Cari / scan kode barang">
-    <select id="stockProduct"></select>
-    <input id="stockQty" type="number" min="1" placeholder="Jumlah stok masuk">
-    <button id="saveStock">Tambah Stok</button>
-    <button class="secondary close">Batal</button>
-  </div>
-</div>
-
-<div class="modal hidden" id="modalFinance">
-  <div class="modalbox financebox">
-    <h3>Keuangan Kas</h3>
-    <small>Catat uang masuk dan keluar secara detail.</small>
-    <div class="finance-summary">
-      <div><span>Total Masuk</span><b id="financeInSummary">Rp0</b></div>
-      <div><span>Total Keluar</span><b id="financeOutSummary">Rp0</b></div>
-      <div><span>Saldo</span><b id="financeBalanceSummary">Rp0</b></div>
-    </div>
-    <div class="finance-form">
-      <select id="financeType"><option value="in">Uang Masuk</option><option value="out">Uang Keluar</option></select>
-      <select id="financeCategory">
-        <option>Modal Tambahan</option><option>Piutang Dibayar</option><option>Pendapatan Lain</option>
-        <option>Belanja Stok</option><option>Listrik</option><option>Air</option><option>Internet</option>
-        <option>Transport</option><option>Gaji</option><option>Makan</option><option>Perbaikan</option><option>Pengeluaran Lain</option>
-      </select>
-      <input id="financeAmount" type="number" min="0" placeholder="Nominal, contoh 50000">
-      <input id="financeNote" placeholder="Keterangan / catatan">
-      <button id="saveFinance">Simpan Catatan</button>
-    </div>
-    <div class="finance-filter">
-      <input id="financeDate" type="date">
-      <button id="showFinanceDate">Lihat Tanggal</button>
-      <button class="secondary" id="showFinanceToday">Hari Ini</button>
-    </div>
-    <div id="financeHistory"></div>
-    <button class="secondary close">Tutup</button>
-  </div>
-</div>
-<div class="modal hidden" id="modalReport">
-  <div class="modalbox reportbox">
-    <h3>Laporan</h3>
-    <div class="reportfilters">
-      <input id="reportDate" type="date">
-      <button id="showDateReport">Lihat Tanggal</button>
-      <button class="secondary" id="showMonthReport">Bulan Ini</button>
-    </div>
-    <div id="reportContent"></div>
-    <button class="secondary close">Tutup</button>
-  </div>
-</div>
-
-</div>
+<div id="modal" class="modal hidden"><div class="modalbox"><h3 id="modalTitle"></h3><div id="modalBody"></div><button id="closeModal" class="secondary">Batal</button></div></div>
 <script src="script.js"></script>
 </body>
 </html>
