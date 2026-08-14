@@ -34,6 +34,7 @@
       <b id="activeCashier">-</b>
       <small id="activeRole">-</small>
     </div>
+    <button id="btnFinance">Keuangan</button>
     <button id="btnReport">Laporan</button>
     <button class="logout-btn" id="logoutBtn">Logout</button>
   </div>
@@ -42,9 +43,13 @@
 <main>
 <section class="stats">
   <div><span>Omzet Hari Ini</span><b id="rev">Rp0</b></div>
-  <div><span>Keuntungan</span><b id="profit">Rp0</b></div>
-  <div><span>Transaksi</span><b id="trxCount">0</b></div>
+  <div><span>Keuntungan Penjualan</span><b id="profit">Rp0</b></div>
+  <div><span>Uang Masuk Hari Ini</span><b id="cashInToday">Rp0</b></div>
+  <div><span>Uang Keluar Hari Ini</span><b id="cashOutToday">Rp0</b></div>
+  <div><span>Saldo Kas Hari Ini</span><b id="cashBalanceToday">Rp0</b></div>
+  <div><span>Transaksi Penjualan</span><b id="trxCount">0</b></div>
   <div><span>Stok Tersisa</span><b id="stockCount">0</b></div>
+  <div><span>Catatan Keuangan</span><b id="financeCount">0</b></div>
 </section>
 
 <section class="layout">
@@ -103,6 +108,35 @@
   </div>
 </div>
 
+<div class="modal hidden" id="modalFinance">
+  <div class="modalbox financebox">
+    <h3>Keuangan Kas</h3>
+    <small>Catat uang masuk dan keluar secara detail.</small>
+    <div class="finance-summary">
+      <div><span>Total Masuk</span><b id="financeInSummary">Rp0</b></div>
+      <div><span>Total Keluar</span><b id="financeOutSummary">Rp0</b></div>
+      <div><span>Saldo</span><b id="financeBalanceSummary">Rp0</b></div>
+    </div>
+    <div class="finance-form">
+      <select id="financeType"><option value="in">Uang Masuk</option><option value="out">Uang Keluar</option></select>
+      <select id="financeCategory">
+        <option>Modal Tambahan</option><option>Piutang Dibayar</option><option>Pendapatan Lain</option>
+        <option>Belanja Stok</option><option>Listrik</option><option>Air</option><option>Internet</option>
+        <option>Transport</option><option>Gaji</option><option>Makan</option><option>Perbaikan</option><option>Pengeluaran Lain</option>
+      </select>
+      <input id="financeAmount" type="number" min="0" placeholder="Nominal, contoh 50000">
+      <input id="financeNote" placeholder="Keterangan / catatan">
+      <button id="saveFinance">Simpan Catatan</button>
+    </div>
+    <div class="finance-filter">
+      <input id="financeDate" type="date">
+      <button id="showFinanceDate">Lihat Tanggal</button>
+      <button class="secondary" id="showFinanceToday">Hari Ini</button>
+    </div>
+    <div id="financeHistory"></div>
+    <button class="secondary close">Tutup</button>
+  </div>
+</div>
 <div class="modal hidden" id="modalReport">
   <div class="modalbox reportbox">
     <h3>Laporan</h3>
