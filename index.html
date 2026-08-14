@@ -11,7 +11,7 @@
   <form id="loginForm" class="login-card">
     <div class="brandmark">POS</div>
     <h1>Kasir Toko</h1>
-    <p>Masuk untuk membuka sistem kasir.</p>
+    <p>Masuk untuk membuka sistem kasir online.</p>
     <input id="username" placeholder="Nama kasir" autocomplete="username">
     <input id="password" type="password" placeholder="Kata sandi" autocomplete="current-password">
     <button>LOGIN</button>
@@ -21,7 +21,7 @@
 
 <div id="app" class="app hidden">
 <aside>
-  <div class="brand"><b>Kasir Toko</b><small>Retail Management</small></div>
+  <div class="brand"><b>Kasir Toko</b><small>Online Retail Management</small></div>
   <nav id="nav">
     <button data-page="dashboard" class="active">▦ Dashboard</button>
     <button data-page="cashier">▣ Kasir</button>
@@ -141,13 +141,14 @@
 </section>
 
 <section id="settings" class="page">
- <article class="card"><h3>Pengaturan Toko</h3><label>Nama Toko</label><input id="storeName"><label>Alamat</label><input id="storeAddress"><label>Footer Struk</label><input id="receiptFooter"><button id="saveSettings">Simpan Pengaturan</button><p class="hint">Versi ini masih offline dan menyimpan data di browser komputer ini.</p></article>
+ <article class="card"><h3>Pengaturan Toko</h3><label>Nama Toko</label><input id="storeName"><label>Alamat</label><input id="storeAddress"><label>Footer Struk</label><input id="receiptFooter"><button id="saveSettings">Simpan Pengaturan</button><p class="hint">ONLINE • Data disimpan di Supabase dan dapat digunakan dari beberapa PC.</p></article>
 </section>
 </main>
 </section>
 </div>
 
 <div id="modal" class="modal hidden"><div class="modalbox"><h3 id="modalTitle"></h3><div id="modalBody"></div><button id="closeModal" class="secondary">Batal</button></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 </body>
 </html>
