@@ -7,7 +7,6 @@ async function deleteTransactionOnline(id){
   if(!confirm(`Hapus transaksi ${t.code}?\n\n${detail}\n\nStok barang akan dikembalikan dan omzet/keuntungan akan dikoreksi.`))return;
 
   try{
-    // Kembalikan stok setiap barang terlebih dahulu.
     for(const item of (t.items||[])){
       if(!item.id)continue;
       const p=products.find(x=>x.id===item.id);
@@ -25,7 +24,6 @@ async function deleteTransactionOnline(id){
       if(r.error)throw r.error;
     }
 
-    // Hapus detail lalu transaksi utama.
     let r=await db.from('transaction_items').delete().eq('transaction_id',id);
     if(r.error)throw r.error;
     r=await db.from('transactions').delete().eq('id',id);
@@ -40,26 +38,57 @@ async function deleteTransactionOnline(id){
   }
 }
 
-// Ganti tampilan dashboard supaya transaksi terbaru memiliki tombol Hapus.
-window.renderDashboard=function(){
-  let d=localDate(),arr=transactions.filter(t=>t.date===d),rev=arr.reduce((s,t)=>s+t.total,0),profit=arr.reduce((s,t)=>s+t.profit,0),f=financeTotals(d);
-  $('dRevenue').textContent=money(rev);
-  $('dProfit').textContent=money(profit);
-  $('dExpense').textContent=money(f.out);
-  $('dBalance').textContent=money(f.balance);
-  $('dTransactions').textContent=arr.length;
-  $('dStock').textContent=products.reduce((s,p)=>s+p.stock,0);
-  $('recentTx').innerHTML=arr.length?arr.slice(0,10).map(t=>`<div class="listrow"><div><b>${t.code}</b><small>${t.time} • ${t.cashier} • ${t.method}</small></div><b>${money(t.total)}</b><button class="danger small" onclick="deleteTransactionOnline(${t.id})">Hapus</button></div>`).join(''):'<div class="empty">Belum ada transaksi hari ini</div>';
-  let low=products.filter(p=>p.stock<=p.minStock);
-  $('lowStock').innerHTML=low.length?low.map(p=>`<div class="listrow"><div><b>${p.name}</b><small>${p.code}</small></div><b class="out">${p.stock}</b></div>`).join(''):'<div class="empty">Stok aman</div>';
-};
+function addDeleteButtons(){
+  if(typeof transactions==='undefined'||!Array.isArray(transactions))return;
 
-// Ganti laporan supaya setiap transaksi juga dapat dihapus.
-window.renderReport=function(){
-  let date=$('reportDate').value||localDate(),arr=transactions.filter(t=>t.date===date),rev=arr.reduce((s,t)=>s+t.total,0),profit=arr.reduce((s,t)=>s+t.profit,0),f=financeTotals(date);
-  $('reportSummary').innerHTML=`<article><span>Omzet</span><b>${money(rev)}</b></article><article><span>Keuntungan</span><b>${money(profit)}</b></article><article><span>Pengeluaran</span><b>${money(f.out)}</b></article><article><span>Saldo Kas</span><b>${money(f.balance)}</b></article>`;
-  $('reportTransactions').innerHTML=arr.length?`<div class="tablewrap"><table><thead><tr><th>Kode</th><th>Jam</th><th>Kasir</th><th>Metode</th><th>Total</th><th>Keuntungan</th><th>Aksi</th></tr></thead><tbody>${arr.map(t=>`<tr><td>${t.code}</td><td>${t.time}</td><td>${t.cashier}</td><td>${t.method}</td><td>${money(t.total)}</td><td>${money(t.profit)}</td><td><button class="danger small" onclick="deleteTransactionOnline(${t.id})">Hapus</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Tidak ada transaksi</div>';
-};
+  // Dashboard -> Transaksi Terbaru
+  const recent=$('recentTx');
+  if(recent){
+    recent.querySelectorAll('.listrow').forEach(row=>{
+      if(row.querySelector('.trx-delete-btn'))return;
+      const t=transactions.find(x=>row.textContent.includes(x.code));
+      if(!t)return;
+      const btn=document.createElement('button');
+      btn.className='danger small trx-delete-btn';
+      btn.textContent='Hapus';
+      btn.onclick=()=>deleteTransactionOnline(t.id);
+      row.appendChild(btn);
+    });
+  }
 
-// Render ulang agar tombol langsung terlihat setelah file ini dimuat.
-if(currentUser){renderDashboard();renderReport();}
+  // Laporan -> tabel transaksi
+  const report=$('reportTransactions');
+  if(report){
+    const table=report.querySelector('table');
+    if(table){
+      const header=table.querySelector('thead tr');
+      if(header && !header.querySelector('.trx-action-head')){
+        const th=document.createElement('th');
+        th.className='trx-action-head';
+        th.textContent='Aksi';
+        header.appendChild(th);
+      }
+      table.querySelectorAll('tbody tr').forEach(row=>{
+        if(row.querySelector('.trx-delete-btn'))return;
+        const t=transactions.find(x=>row.textContent.includes(x.code));
+        if(!t)return;
+        const td=document.createElement('td');
+        const btn=document.createElement('button');
+        btn.className='danger small trx-delete-btn';
+        btn.textContent='Hapus';
+        btn.onclick=()=>deleteTransactionOnline(t.id);
+        td.appendChild(btn);
+        row.appendChild(td);
+      });
+    }
+  }
+}
+
+// Daftar transaksi di-render ulang oleh online.js setiap beberapa detik.
+// Observer ini memastikan tombol Hapus selalu dipasang kembali.
+const trxObserver=new MutationObserver(()=>addDeleteButtons());
+const watchTargets=[$('recentTx'),$('reportTransactions')].filter(Boolean);
+watchTargets.forEach(el=>trxObserver.observe(el,{childList:true,subtree:true}));
+
+setInterval(addDeleteButtons,1000);
+setTimeout(addDeleteButtons,300);
